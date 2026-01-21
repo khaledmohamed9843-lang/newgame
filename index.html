@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة مساعدة الطفل الحزين</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .game-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        @media (min-width: 768px) {
+            .game-container {
+                border-radius: 30px;
+                padding: 40px;
+            }
+        }
+
+        /* شاشة البداية */
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h1 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .start-screen h1 {
+                font-size: 48px;
+            }
+        }
+
+        .start-screen p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .start-screen p {
+                font-size: 24px;
+            }
+        }
+
+        .start-emoji {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media (min-width: 768px) {
+            .start-emoji {
+                font-size: 120px;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .child-card {
+            border-radius: 15px;
+            padding: 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            height: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .child-card {
+                border-radius: 20px;
+                padding: 20px;
+            }
+        }
+        
+        .child-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+        
+        .child-card:active {
+            transform: translateY(-5px);
+        }
+        
+        .child-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        @media (min-width: 768px) {
+            .child-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        .main-child-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 15px auto;
+            display: block;
+            border: 4px solid #667eea;
+            transition: all 0.5s ease;
+        }
+        
+        @media (min-width: 768px) {
+            .main-child-image {
+                width: 200px;
+                height: 200px;
+                border: 5px solid #667eea;
+                margin: 20px auto;
+            }
+        }
+        
+        .happiness-bar {
+            background: #e0e0e0;
+            border-radius: 25px;
+            height: 35px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .happiness-bar {
+                height: 40px;
+                margin: 20px 0;
+            }
+        }
+        
+        .happiness-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        @media (min-width: 768px) {
+            .happiness-fill {
+                font-size: 16px;
+            }
+        }
+        
+        .task-option {
+            background: white;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            padding: 15px 10px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            height: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .task-option {
+                border-radius: 15px;
+                padding: 20px;
+            }
+        }
+        
+        .task-option:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .task-option:active {
+            transform: scale(0.98);
+        }
+        
+        .task-option.correct {
+            border-color: #51cf66;
+            background: #d3f9d8;
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .task-option.wrong {
+            border-color: #ff6b6b;
+            background: #ffe0e0;
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .stars {
+            font-size: 30px;
+            margin: 15px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .stars {
+                font-size: 40px;
+                margin: 20px 0;
+            }
+        }
+        
+        .message-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        @media (min-width: 768px) {
+            .message-box {
+                padding: 30px;
+                border-radius: 20px;
+                font-size: 24px;
+            }
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        @media (min-width: 768px) {
+            .btn-custom {
+                padding: 15px 40px;
+                font-size: 20px;
+                width: auto;
+            }
+        }
+        
+        .btn-custom:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-custom:active {
+            transform: scale(1.05);
+        }
+        
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .celebration-content {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            animation: popup 0.5s ease;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .celebration-content {
+                padding: 50px;
+                border-radius: 30px;
+            }
+        }
+        
+        @keyframes popup {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+        }
+        
+        h2 {
+            font-size: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            h2 {
+                font-size: 28px;
+            }
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            h3 {
+                font-size: 24px;
+            }
+        }
+        
+        .task-emoji {
+            font-size: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .task-emoji {
+                font-size: 60px;
+            }
+        }
+        
+        .celebration-emoji {
+            font-size: 60px;
+        }
+        
+        @media (min-width: 768px) {
+            .celebration-emoji {
+                font-size: 100px;
+            }
+        }
+        
+        .celebration-face {
+            font-size: 50px;
+            margin: 15px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .celebration-face {
+                font-size: 80px;
+                margin: 20px 0;
+            }
+        }
+        
+        .celebration-stars {
+            font-size: 40px;
+            margin: 20px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .celebration-stars {
+                font-size: 60px;
+                margin: 30px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio Elements -->
+    <audio id="startSound" preload="auto">
+        <source src="start.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="fristtrueSound" preload="auto">
+        <source src="fristtrue.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="trueSound" preload="auto">
+        <source src="true.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="fristfalseSound" preload="auto">
+        <source src="fristfalse.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="falseSound" preload="auto">
+        <source src="false.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="finishSound" preload="auto">
+        <source src="finsh.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="happySound" preload="auto">
+        <source src="happy.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="q1Sound" preload="auto">
+        <source src="q1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="q2Sound" preload="auto">
+        <source src="q2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="q3Sound" preload="auto">
+        <source src="q3.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="game-container">
+        <!-- شاشة البداية -->
+        <div id="startScreen" class="start-screen">
+            <!-- <div class="start-emoji">🌈👶🎮</div> -->
+            <h1>مرحباً بك في حديقة الأصدقاء!</h1>
+            <p>ساعد صديقك ليصبح سعيداً 💖</p>
+            <button class="btn-custom" onclick="startGameFromBeginning()">ابدأ اللعبة 🎯</button>
+        </div>
+
+        <!-- شاشة اختيار الطفل -->
+        <div id="selectScreen" class="hidden" style="background-image: url('1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 20px;">
+            <h1 class="text-center mb-3" style="color: black">🌈 حديقة الأصدقاء 🌈</h1>
+            <p class="text-center fs-5 fs-md-4 mb-4">.</p>
+            
+            <div class="row g-2 g-md-3">
+                <div class="col-6 col-md-3">
+                    <div class="child-card text-center" onclick="selectChild('wrong')">
+                        <img src="paly.png" class="child-image" alt="أحمد">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="child-card text-center" onclick="selectChild('sad')">
+                        <img src="sad.png" class="child-image" alt="علي">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="child-card text-center" onclick="selectChild('wrong')">
+                        <img src="fun.png" class="child-image" alt="خالد">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="child-card text-center" onclick="selectChild('wrong')">
+                        <img src="paly.png" class="child-image" alt="محمود">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- شاشة اللعب -->
+        <div id="gameScreen" class="hidden">
+            <!-- <div class="message-box">
+               ! هيا نساعد صديقنا علي ليصبح سعيد 🌟
+            </div> -->
+            
+            <div class="text-center">
+                <img id="mainChildImage" src="sad.png" class="main-child-image" alt="علي">
+            </div>
+            
+            <div class="happiness-bar">
+                <div class="happiness-fill" id="happinessBar">0%</div>
+            </div>
+            
+            <div class="stars text-center" id="starsDisplay">
+                ⭐ <span id="starCount">0</span> / 3
+            </div>
+            
+            <!-- المهمة 1: اختيار المشاعر -->
+            <div id="task1" class="hidden">
+                <h3 class="text-center mb-3 mb-md-4">كيف يشعر صديقك الآن؟</h3>
+                <div class="row g-2 g-md-3">
+                    <div class="col-6 col-md-3">
+                        <div class="task-option" onclick="checkAnswer(1, 'sad')">
+                            <div class="task-emoji">😢</div>
+                            <p class="fw-bold mb-0">حزين</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="task-option" onclick="checkAnswer(1, 'angry')">
+                            <div class="task-emoji">😠</div>
+                            <p class="fw-bold mb-0">غاضب</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="task-option" onclick="checkAnswer(1, 'scared')">
+                            <div class="task-emoji">😨</div>
+                            <p class="fw-bold mb-0">خائف</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="task-option" onclick="checkAnswer(1, 'happy')">
+                            <div class="task-emoji">😊</div>
+                            <p class="fw-bold mb-0">سعيد</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- المهمة 2: اختيار الحل -->
+            <div id="task2" class="hidden">
+                <h3 class="text-center mb-3 mb-md-4">ماذا يمكن أن يجعل صديقك يبتسم؟</h3>
+                <div class="row g-2 g-md-3 justify-content-center">
+                    <div class="col-6 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(2, 'balloon')">
+                            <div class="task-emoji">🎈</div>
+                            <p class="fw-bold mb-0">بالون</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(2, 'toy')">
+                            <div class="task-emoji">🧸</div>
+                            <p class="fw-bold mb-0">دبدوب</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(2, 'rock')">
+                            <div class="task-emoji">📖</div>
+                            <p class="fw-bold mb-0">كتاب</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- المهمة 3: كلمة طيبة -->
+            <div id="task3" class="hidden">
+                <h3 class="text-center mb-3 mb-md-4">اختر الكلمة الطيبة</h3>
+                <div class="row g-2 g-md-3 justify-content-center">
+                    <div class="col-12 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(3, 'nice1')">
+                            <div class="task-emoji">💬</div>
+                            <p class="fw-bold mb-0">"لا تحزن"</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(3, 'nice2')">
+                            <div class="task-emoji">💬</div>
+                            <p class="fw-bold mb-0">"كن جيدا"</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="task-option" onclick="checkAnswer(3, 'mean')">
+                            <div class="task-emoji">💬</div>
+                            <p class="fw-bold mb-0">"اذهب بعيدًا"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- شاشة الاحتفال -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <div class="celebration-emoji">🎉</div>
+            <img  src="happy.png" class="main-child-image" alt="علي سعيد">
+            <h1 style="color: #667eea; margin: 15px 0;">أحسنت!</h1>
+            <h2 style="color: #764ba2;">أنت صديق طيب ❤️</h2>
+            <div class="celebration-stars">⭐⭐⭐</div>
+            <button class="btn-custom" onclick="restartGame()">العب مرة أخرى</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentTask = 0;
+        let stars = 0;
+        let happiness = 0;
+        let currentImage = '';
+        let currentSound = null;
+        let soundQueue = [];
+        
+        // Stop all currently playing sounds
+        function stopAllSounds() {
+            if (currentSound) {
+                currentSound.pause();
+                currentSound.currentTime = 0;
+                currentSound = null;
+            }
+        }
+        
+        // Play sound function - stops previous sound first
+        function playSound(soundId) {
+            stopAllSounds();
+            
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                currentSound = sound;
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Sound play failed:', e));
+            }
+        }
+        
+        // Play sounds in sequence (one after another)
+        function playSoundsSequence(...soundIds) {
+            if (soundIds.length === 0) return;
+            
+            stopAllSounds();
+            soundQueue = [...soundIds];
+            playNextInQueue();
+        }
+        
+        function playNextInQueue() {
+            if (soundQueue.length === 0) return;
+            
+            const soundId = soundQueue.shift();
+            const sound = document.getElementById(soundId);
+            
+            if (sound) {
+                currentSound = sound;
+                sound.currentTime = 0;
+                
+                // When this sound ends, play the next one
+                sound.onended = () => {
+                    playNextInQueue();
+                };
+                
+                sound.play().catch(e => {
+                    console.log('Sound play failed:', e);
+                    playNextInQueue(); // Try next sound if this one fails
+                });
+            } else {
+                playNextInQueue(); // Skip to next if sound not found
+            }
+        }
+        
+        // بدء اللعبة من شاشة البداية
+        function startGameFromBeginning() {
+            playSound('startSound');
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('selectScreen').classList.remove('hidden');
+        }
+        
+        function selectChild(type) {
+            if (type === 'sad') {
+                currentImage = 'sad.png';
+                document.getElementById('selectScreen').classList.add('hidden');
+                document.getElementById('gameScreen').classList.remove('hidden');
+                playSoundsSequence('fristtrueSound', 'q1Sound');
+                startGame();
+            } else {
+                playSound('fristfalseSound');
+                // alert('هذا الطفل سعيد بالفعل! اختر الطفل الحزين 😊');
+            }
+        }
+        
+        function startGame() {
+            currentTask = 1;
+            showTask(1);
+        }
+        
+        function showTask(taskNum) {
+            // إخفاء جميع المهام
+            document.getElementById('task1').classList.add('hidden');
+            document.getElementById('task2').classList.add('hidden');
+            document.getElementById('task3').classList.add('hidden');
+            
+            // إظهار المهمة الحالية
+            if (taskNum <= 3) {
+                document.getElementById('task' + taskNum).classList.remove('hidden');
+            }
+        }
+        
+        function checkAnswer(taskNum, answer) {
+            let isCorrect = false;
+            
+            // التحقق من الإجابة الصحيحة
+            if (taskNum === 1 && answer === 'sad') isCorrect = true;
+            if (taskNum === 2 && answer === 'toy') isCorrect = true;
+            if (taskNum === 3 && answer === 'nice1') isCorrect = true;
+            
+            // تحديد العنصر المختار
+            const clickedOption = event.currentTarget;
+            
+            if (isCorrect) {
+                if(taskNum === 1){
+                    playSoundsSequence('trueSound', 'q2Sound');
+                }
+                if(taskNum === 2){
+                    playSoundsSequence('trueSound', 'q3Sound');
+                }
+                if(taskNum === 3){
+                    playSound('trueSound');
+                }
+                
+                clickedOption.classList.add('correct');
+                stars++;
+                happiness += 33.33;
+                
+                setTimeout(() => {
+                    updateProgress();
+                    
+                    if (currentTask < 3) {
+                        currentTask++;
+                        showTask(currentTask);
+                    } else {
+                        showCelebration();
+                    }
+                }, 1000);
+            } else {
+                playSound('falseSound');
+                clickedOption.classList.add('wrong');
+                setTimeout(() => {
+                    clickedOption.classList.remove('wrong');
+                }, 500);
+            }
+        }
+        
+        function updateProgress() {
+            // تحديث النجوم
+            document.getElementById('starCount').textContent = stars;
+            
+            // تحديث شريط السعادة
+            const happinessBar = document.getElementById('happinessBar');
+            happinessBar.style.width = happiness + '%';
+            happinessBar.textContent = Math.round(happiness) + '%';
+            
+            // تحديث صورة الطفل
+            const image = document.getElementById('mainChildImage');
+            if (happiness >= 100) {
+                image.src = 'happy.png';
+            }
+        }
+        
+        function showCelebration() {
+            setTimeout(() => {
+                playSoundsSequence('finishSound', 'happySound');
+                document.getElementById('celebration').style.display = 'flex';
+            }, 500);
+        }
+        
+        function restartGame() {
+            stopAllSounds();
+            currentTask = 0;
+            stars = 0;
+            happiness = 0;
+            currentImage = '';
+            
+            document.getElementById('celebration').style.display = 'none';
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('selectScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            
+            document.getElementById('happinessBar').style.width = '0%';
+            document.getElementById('happinessBar').textContent = '0%';
+            document.getElementById('starCount').textContent = '0';
+            
+            // إزالة التنسيقات من الخيارات
+            const allOptions = document.querySelectorAll('.task-option');
+            allOptions.forEach(option => {
+                option.classList.remove('correct', 'wrong');
+            });
+        }
+    </script>
+</body>
+</html>
