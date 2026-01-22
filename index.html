@@ -18,7 +18,7 @@
         }
         
         .game-container {
-            max-width: 1000px;
+            max-width: 95%;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -456,32 +456,43 @@
         </div>
 
         <!-- شاشة اختيار الطفل -->
-        <div id="selectScreen" class="hidden" style="background-image: url('1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 20px;">
+        <div id="selectScreen" class="hidden" style="background-image: url('1.png'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 20px; max-width: 100%; padding: 20px;">
             <h1 class="text-center mb-3" style="color: black">🌈 حديقة الأصدقاء 🌈</h1>
             <p class="text-center fs-5 fs-md-4 mb-4">.</p>
             
             <div class="row g-2 g-md-3">
-                <div class="col-6 col-md-3">
+                <div class="col-4 col-md-2">
                     <div class="child-card text-center" onclick="selectChild('wrong')">
                         <img src="paly.png" class="child-image" alt="أحمد">
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-4 col-md-2">
                     <div class="child-card text-center" onclick="selectChild('sad')">
                         <img src="sad.png" class="child-image" alt="علي">
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-4 col-md-2">
                     <div class="child-card text-center" onclick="selectChild('wrong')">
                         <img src="fun.png" class="child-image" alt="خالد">
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-4 col-md-2">
                     <div class="child-card text-center" onclick="selectChild('wrong')">
-                        <img src="paly.png" class="child-image" alt="محمود">
+                        <img src="bascket.png" class="child-image" alt="محمود">
+                    </div>
+                </div>
+                <div class="col-4 col-md-2">
+                    <div class="child-card text-center" onclick="selectChild('wrong')">
+                        <img src="cube.png" class="child-image" alt="يوسف">
+                    </div>
+                </div>
+                <div class="col-4 col-md-2">
+                    <div class="child-card text-center" onclick="selectChild('wrong')">
+                        <img src="boys.png" class="child-image" alt="عمر">
                     </div>
                 </div>
             </div>
+            
         </div>
         
         <!-- شاشة اللعب -->
